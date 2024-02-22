@@ -2,9 +2,46 @@
 
 This repository is used to record some git commands which are frequently used.
 
-Git Reference Manual >> [Link](https://git-scm.com/docs)
+[Git Document Reference Manual](https://git-scm.com/docs)
+
+If you like this tips, don't forget to give a star! :star2:
 
 ---
+
+## Table of Contents
+
+- [Setup and Config](#setup-and-config)
+  - [Configuration](#configuration)
+- [Getting and Creating Projects](#getting-and-creating-projects)
+  - [Initialization](#initialization)
+  - [Clone](#clone)
+- [Basic Snap Shotting](#basic-snap-shotting)
+  - [Status](#status)
+  - [Add](#add)
+  - [Commit](#commit)
+  - [Diff](#diff)
+  - [Restore](#restore)
+  - [Reset](#reset)
+- [Branching and Merging](#branching-and-merging)
+  - [Branch](#branch)
+  - [Checkout](#checkout)
+  - [Merge](#merge)
+  - [Log](#log)
+  - [Stash](#stash)
+  - [Tag](#tag)
+- [Sharing and Updating Projects](#sharing-and-updating-projects)
+  - [Fetch](#fetch)
+  - [Push](#push)
+  - [Remote](#remote)
+- [Patching](#patching)
+  - [Cherry-Pick](#cherry-pick)
+  - [Rebase](#rebase)
+  - [Revert](#revert)
+- [Debugging](#debugging)
+  - [Grep](#grep)
+- [Administration](#administration)
+  - [Reflog](#reflog)
+  - [Gitk](#gitk)
 
 ## Setup and Config
 
@@ -13,26 +50,30 @@ Git Reference Manual >> [Link](https://git-scm.com/docs)
 Set and get git global or repository settings
 
 ```
-// -- Set global user settings
+/* -- Set global user settings -- */
 $ git config --global user.name xxx
 $ git config --global user.email xxx@mail.com
 
-// -- Set repository user settings
+/* -- Set repository user settings -- */
 $ git config user.name xxx
 $ git config user.email xxx@mail.com
 
-// -- Remove settings
+/* -- Remove settings -- */
 $ git config --unset user.name
 
-// -- Get settings
+/* -- Get settings -- */
 $ git config --global --list
 $ git config --list
 
-// -- Use alias
+/* -- Use alias -- */
 $ git config --global alias.br branch
+
+/* -- Avoid line ending problem under cross platform development -- */
+$ git config --global core.autocrlf true
 ```
 
 Useful Alias
+
 ```
 alias.br=branch
 alias.chp=cherry-pick
@@ -41,7 +82,7 @@ alias.cm=commit
 alias.co=checkout
 alias.st=status
 alias.lg=log --oneline --graph
-alias.la=log --graph --all --pretty=format:"%C(auto)%h -%d %s%Creset %C(blue)(%cr)%Creset %C(dim white)<%an>%Creset"
+alias.la=log --graph --all --pretty=format:'%C(auto)%h -%d %s%Creset %Cblue(%cr)%Creset %C(dim white)<%an>%Creset'
 ```
 
 ---
@@ -66,7 +107,7 @@ $ git clone [<directory>]
 
 ---
 
-## Basic Snapshotting
+## Basic Snap Shotting
 
 ### Status
 
@@ -83,16 +124,8 @@ Add file contents to the index
 ```
 $ git add [<file_path>]
 
-// -- Add all unstaged files in the index
+/* -- Add all un-staged files in the index -- */
 $ git add .
-```
-
-### Diff
-
-Show changes between commits, commit and working tree, etc.
-
-```
-$ git diff
 ```
 
 ### Commit
@@ -102,8 +135,25 @@ Record changes to repository
 ```
 $ git commit
 
-// -- Add and commit all unstaged files with commit message
-$ git cm -am [<commit_message>]
+$ git commit -m [<commit_message>]
+
+/* -- Add and commit all unstaged files with commit message -- */
+$ git commit -am [<commit_message>]
+```
+
+### Diff
+
+Show changes between commits, commit and working tree, etc.
+
+```
+$ git diff [<file_path>]
+
+$ git diff HEAD~1
+
+$ git diff [<commit-1>] [<commit-2>]
+
+/* -- Compare the difference between index changes and last commit -- */
+$ git diff --cached [<file_path>]
 ```
 
 ### Restore
@@ -112,6 +162,9 @@ Restore working tree files
 
 ```
 $ git restore [<file_path>]
+
+/* -- Restore staged files -- */
+$ git restore --staged [<file_path>]
 ```
 
 ### Reset
@@ -119,7 +172,7 @@ $ git restore [<file_path>]
 Reset current HEAD to specified state
 
 ```
-$ git reset [<commit>]
+$ git reset [--soft | --mixed | --hard] [<commit>]
 ```
 
 ---
@@ -131,19 +184,19 @@ $ git reset [<commit>]
 List, create, or delete branches
 
 ```
-// -- List all branches in your repo, and which branch you're curently in
+/* -- List all branches in your repo, and which branch you're currently in -- */
 $ git branch
 
-// -- Create a branch
+/* -- Create a branch -- */
 $ git branch [<branch_name>]
 
-// -- Delete the branch
+/* -- Delete the branch -- */
 $ git branch -d [<branch_name>]
 
-// -- Delete the branch (FORCE)
+/* -- Delete the branch (FORCE) -- */
 $ git branch -D [<branch_name>]
 
-// -- Change the branch name
+/* -- Change the branch name -- */
 $ git branch -m [<older_branch_name>] [<new_branch_name>]
 ```
 
@@ -152,13 +205,13 @@ $ git branch -m [<older_branch_name>] [<new_branch_name>]
 Switch branches or restore working tree files
 
 ```
-// -- Switch to another branch
+/* -- Switch to another branch -- */
 $ git checkout [<branch_name>]
 
-// -- Create a new branch & switch to it
+/* -- Create a new branch & switch to it -- */
 $ git checkout -b [<branch_name>]
 
-// -- Cancel the changed file
+/* -- Cancel the changed file -- */
 $ git checkout -- [<file>]
 ```
 
@@ -167,10 +220,10 @@ $ git checkout -- [<file>]
 Join two or more histories together
 
 ```
-$ git merge
+$ git merge [<branch>]
 
-// -- Merge without fast-forward
-$ git merge --no-ff
+/* -- Merge without fast-forward -- */
+$ git merge --no-ff [<branch>]
 ```
 
 ### Log
@@ -180,10 +233,10 @@ Show commit logs
 ```
 $ git log
 
-// -- Specify date
+/* -- Specify date -- */
 $ git log --before=[<date>] --after=[<date>]
 
-// -- Specifiy author
+/* -- Specify author -- */
 $ git log --author=[<author_name>]
 ```
 
@@ -194,19 +247,22 @@ Stash the changes in a dirty working directory away
 ```
 $ git stash
 
-// -- List out current stash
+/* -- List out current stash -- */
 $ git stash list
 
-// -- Output your stashed file
+/* -- Push the files wanna stash -- */
+$ git stash push
+
+/* -- Output the stashed file -- */
 $ git stash apply
 
-// -- Output specific stashed file
+/* -- Output specific stashed file -- */
 $ git stash apply [<stash>]
 
-// -- Remove a single stashed state & apply it on top of current working tree state
+/* -- Remove a single stashed state & apply it on top of current working tree state -- */
 $ git stash pop
 
-// -- Remove a single stash entry from the list of stash entries
+/* -- Remove a single stash entry from the list of stash entries -- */
 $ git stash drop [<stash>]
 ```
 
@@ -217,8 +273,11 @@ Create, list, delete or verify a tag object signed with GPG
 ```
 $ git tag [<tag_name>]
 
-// -- Delete a tag
+/* -- Delete a tag -- */
 $ git tag -d [<tag_name>]
+
+/* -- Delete all local tags -- */
+$ git tag -l | xargs git tag -d
 ```
 
 ---
@@ -232,8 +291,11 @@ Download objects and refs from another repository
 ```
 $ git fetch
 
-// -- Fetch all remote
+/* -- Fetch all remote -- */
 $ git fetch --all
+
+/* -- Before fetching, remove any remote-tracking references that no longer exist on the remote -- */
+$ git fetch --prune
 ```
 
 ### Push
@@ -243,8 +305,8 @@ Update remote refs along with associated objects
 ```
 $ git push
 
-// -- Add upstream reference
-$ git push -u | --set-upstream [<remote_name>] [<repository_url>]
+/* -- Add upstream reference -- */
+$ git push [-u | --set-upstream] [<remote_name>] [<repository_url>]
 ```
 
 ### Remote
@@ -252,31 +314,31 @@ $ git push -u | --set-upstream [<remote_name>] [<repository_url>]
 Manage set of tracked repositories
 
 ```
-// -- Show remote url after name
+/* -- Show remote url after name -- */
 $ git remote -v
 
-// -- Add remote
-$ git remote add [<remote_name>] [<repositoy_url>]
+/* -- Add remote -- */
+$ git remote add [<remote_name>] [<repository_url>]
 
-// -- Remove remote
-$ git remote remove [<remote_name>] [<repositoy_url>]
+/* -- Remove remote -- */
+$ git remote remove [<remote_name>] [<repository_url>]
 
-// -- Change remote URL
-$ git remote set-url [<remote_name>] [<repositoy_url>]
+/* -- Change remote URL -- */
+$ git remote set-url [<remote_name>] [<repository_url>]
 ```
 
 ---
 
 ## Patching
 
-### Cherry-pick
+### Cherry-Pick
 
 Apply the changes introduced by some existing commits
 
 ```
 $ git cherry-pick [<commit_hash_1>] [<commit_hash_2>] ...
 
-// -- Pick without commit
+/* -- Pick without commit -- */
 $ git cherry-pick [<commit_hash_1>] --no-commit
 ```
 
@@ -285,7 +347,7 @@ $ git cherry-pick [<commit_hash_1>] --no-commit
 Reapply commits on top of another base tip
 
 ```
-$ git rebase -i | --interactive [<new_base>]
+$ git rebase [-i | --interactive] [<new_base>]
 ```
 
 ### Revert
@@ -300,12 +362,12 @@ $ git revert
 
 ## Debugging
 
-### prep
+### Grep
 
 Print lines matching a pattern
 
 ```
-// -- Search with line number
+/* -- Search with line number -- */
 $ git grep -n [<search_text>]
 ```
 
@@ -313,7 +375,7 @@ $ git grep -n [<search_text>]
 
 ## Administration
 
-### Git Reflog
+### Reflog
 
 Manage & track reflog information
 
@@ -321,13 +383,13 @@ Manage & track reflog information
 $ git reflog
 ```
 
-### Git Gitk
+### Gitk
 
 Open a Git repository browser
 
 ```
 $ gitk
 
-// -- Show all references (branches, tags, etc.)
+/* -- Show all references (branches, tags, etc.) -- */
 $ gitk --all
 ```
