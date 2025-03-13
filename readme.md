@@ -1,6 +1,6 @@
 # Git Tips
 
-This repository is used to record some git commands which are frequently used.
+This repository is used to note some git commands down which are frequently used.
 
 [Git Document Reference Manual](https://git-scm.com/docs)
 
@@ -22,6 +22,7 @@ If you like this tips, don't forget to give a star! :star2:
   - [Diff](#diff)
   - [Restore](#restore)
   - [Reset](#reset)
+  - [rm](#rm)
 - [Branching and Merging](#branching-and-merging)
   - [Branch](#branch)
   - [Checkout](#checkout)
@@ -151,7 +152,7 @@ $ git diff <file_path>
 
 $ git diff HEAD~1
 
-$ git diff <commit-1> <commit-2>
+$ git diff <commit_hash_1> <commit_hash_2>
 
 # Compare the difference between index changes and last commit
 $ git diff --cached <file_path>
@@ -174,6 +175,14 @@ Reset current HEAD to specified state
 
 ```bash
 $ git reset [--soft | --mixed | --hard] <commit>
+```
+
+### rm
+
+Remove files from the working tree and from the index
+
+```bash
+$ git rm <file_path>
 ```
 
 ---
@@ -324,7 +333,7 @@ Manage set of tracked repositories
 $ git remote -v
 
 # Add remote
-$ git remote add <remote_name></remote_name> <repository_url>
+$ git remote add <remote_name> <repository_url>
 
 # Remove remote
 $ git remote remove <remote_name> <repository_url>
@@ -342,7 +351,7 @@ $ git submodule add <repository> <path>
 # Occasionally update the submodule to a new version
 $ git -C <path> checkout <new-version>
 $ git add <path>
-$ git commit -m "update submodule to new version"
+$ git commit -m <commit_message>
 
 # Check submodules status
 $ git submodule status
@@ -351,7 +360,13 @@ $ git submodule status
 $ git submodule init
 $ git submodule update
 # Shorthand
-$ git submodule update --init --recursive
+$ git submodule update --init
+
+# Update recurse into nested submodules
+$ git submodule update --recursive <path>
+
+# Unregister the given submodules
+$ git submodule deinit <path>
 
 # Remove submodules
 $ git rm <path>
